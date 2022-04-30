@@ -2,28 +2,41 @@
   <ion-page>
     <ion-header>
       <ion-toolbar>
-        <ion-title>Tab 1</ion-title>
+        <ion-title>図鑑IDを入力しろ!!</ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Tab 1</ion-title>
-        </ion-toolbar>
-      </ion-header>
-    
-      <ExploreContainer name="Tab 1 page" />
+    <ion-content>    
+      <InputNumber :inputValue="pokemon.id" @updateInputEmit="setPokemonValue"/>
+      <ion-button expand="block" @click="setStore()">send</ion-button>
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import { defineComponent, reactive } from 'vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton } from '@ionic/vue';
+import { useStore } from 'vuex'
+import InputNumber from '@/components/inputNumber.vue';
 
 export default  defineComponent({
   name: 'Tab1Page',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { InputNumber, IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButton },
+  setup() {
+    const store = useStore();
+    const pokemon = reactive({
+      id: 1,
+    });
+    const setStore = (): void => {
+      store.commit('setId', {id: pokemon.id});
+    } 
+    const setPokemonValue = (id?: string | null): void => {
+      if (id) pokemon.id = Number(id);
+    };
+    return {
+      pokemon,
+      setStore,
+      setPokemonValue,
+    };
+  }
 });
 </script>

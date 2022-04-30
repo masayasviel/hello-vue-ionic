@@ -6,24 +6,30 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Tab 2</ion-title>
-        </ion-toolbar>
-      </ion-header>
-      
-      <ExploreContainer name="Tab 2 page" />
+      <img :src="`https://github.com/fanzeyi/pokemon.json/blob/master/images/${state.id}.png?raw=true`">
     </ion-content>
   </ion-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
-import ExploreContainer from '@/components/ExploreContainer.vue';
+import { defineComponent, computed, reactive } from 'vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, onIonViewWillEnter } from '@ionic/vue';
+import { useStore } from 'vuex'
 
 export default defineComponent({
   name: 'Tab2Page',
-  components: { ExploreContainer, IonHeader, IonToolbar, IonTitle, IonContent, IonPage }
+  components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage },
+  setup() {
+    const store = useStore();
+    const state = reactive({
+      id: '001'
+    });
+    onIonViewWillEnter(() => {
+      state.id = (store.getters.getId as number).toString().padStart(3, '0');
+    });
+    return {
+      state
+    }
+  },
 });
 </script>
